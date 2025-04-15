@@ -26,7 +26,7 @@ type alias Model =
 
 init : Flags -> ( Model, Cmd Msg )
 init flags =
-    ( Maybe.withDefault { date = "aaaaa" } flags.maybeModel
+    ( Maybe.withDefault { date = "1970-01-01" } flags.maybeModel
     , Cmd.none
     )
 
@@ -39,7 +39,7 @@ init flags =
 
 type Msg
     = NoOp
-    | SetStorage Model
+    | SetStorage
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -48,8 +48,8 @@ update msg model =
         NoOp ->
             ( model, Cmd.none )
 
-        SetStorage _ ->
-            ( Model "22131231212", setStorage (Model "22131231212") )
+        SetStorage ->
+            ( model, setStorage (Model "2025.04.25") )
 
 
 
@@ -74,7 +74,7 @@ view model =
                 , style "width" "100px"
                 ]
                 [ button
-                    [ onClick (SetStorage model)
+                    [ onClick SetStorage
                     , style "background-color" "green"
                     , style "height" "100px"
                     , style "width" "100px"
