@@ -1,0 +1,24 @@
+{
+  "name": "elm-capacitor",
+  "description": "",
+  "version": "1.0.0",
+  "main": "index.mjs",
+  "scripts": {
+    "open-android": "npx cap open android",
+    "open-ios": "npx cap open ios",
+    "start": "ENV=DEV vite --host",
+    "sync": "vite build; npx cap sync",
+    "sync-dev": "ENV=DEV vite build; npx cap sync"
+  },
+  "dependencies": {
+    "@capacitor/android": "^7.2.0",
+    "@capacitor/core": "^7.2.0",
+    "@capacitor/ios": "^7.2.0",
+    "@capacitor/preferences": "^7.0.1",
+    "vite": "^6.2.6"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^7.2.0",
+    "vite-plugin-elm": "^3.0.1"
+  }
+}

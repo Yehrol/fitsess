@@ -1,0 +1,5 @@
+{
+  "appId": "com.test",
+  "appName": "Elm capacitor",
+  "webDir": "dist"
+}
