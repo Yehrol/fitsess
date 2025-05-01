@@ -4,17 +4,15 @@ import { Preferences } from "@capacitor/preferences";
 try {
   Promise.all([getObject()]).then(function ([state]) {
     let app = Elm.Main.init({
-      flags: {
-        maybeModel: state,
-      },
+      flags: {},
     });
 
-    app.ports.setStorage.subscribe(function (state) {
-      Preferences.set({
-        key: "user",
-        value: JSON.stringify(state),
-      });
-    });
+    // app.ports.setStorage.subscribe(function (state) {
+    //   Preferences.set({
+    //     key: "user",
+    //     value: JSON.stringify(state),
+    //   });
+    // });
   });
 } catch (e) {
   console.log(e);

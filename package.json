@@ -6,7 +6,7 @@
   "scripts": {
     "open-android": "npx cap open android",
     "open-ios": "npx cap open ios",
-    "start": "ENV=DEV vite --host",
+    "dev": "ENV=DEV vite --host",
     "sync": "vite build; npx cap sync",
     "sync-dev": "ENV=DEV vite build; npx cap sync"
   },
