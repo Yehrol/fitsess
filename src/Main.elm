@@ -65,79 +65,54 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case ( msg, model ) of
         ( GotHomeMsg homeMsg, Home homeModel ) ->
-            Home.update homeMsg homeModel
-                |> updateWith Home GotHomeMsg
-                |> (\( m, c, a ) -> performActions m c a)
+            let
+                ( newMdl, newCmd, actions ) =
+                    Home.update homeMsg homeModel
+            in
+            updateWith Home GotHomeMsg ( newMdl, newCmd )
+                |> (\( mdl, cmd ) -> performActions mdl cmd actions)
 
         ( GotEditSessionMsg editSessionMsg, EditSession editSessionModel ) ->
-            EditSession.update editSessionMsg editSessionModel
-                |> updateWith EditSession GotEditSessionMsg
-                |> (\( m, c, a ) -> performActions m c a)
+            let
+                ( newMdl, newCmd, actions ) =
+                    EditSession.update editSessionMsg editSessionModel
+            in
+            updateWith EditSession GotEditSessionMsg ( newMdl, newCmd )
+                |> (\( mdl, cmd ) -> performActions mdl cmd actions)
 
         ( GotNewExerciseMsg newExerciseMsg, NewExercise newExerciseModel ) ->
-            NewExercise.update newExerciseMsg newExerciseModel
-                |> updateWith NewExercise GotNewExerciseMsg
-                |> (\( m, c, a ) -> performActions m c a)
+            let
+                ( newMdl, newCmd, actions ) =
+                    NewExercise.update newExerciseMsg newExerciseModel
+            in
+            updateWith NewExercise GotNewExerciseMsg ( newMdl, newCmd )
+                |> (\( mdl, cmd ) -> performActions mdl cmd actions)
 
         ( GotHistoryMsg historyMsg, History historyModel ) ->
-            History.update historyMsg historyModel
-                |> updateWith History GotHistoryMsg
-                |> (\( m, c, a ) -> performActions m c a)
+            let
+                ( newMdl, newCmd, actions ) =
+                    History.update historyMsg historyModel
+            in
+            updateWith History GotHistoryMsg ( newMdl, newCmd )
+                |> (\( mdl, cmd ) -> performActions mdl cmd actions)
 
         ( GotHistorySessionMsg historySessionMsg, HistorySession historySessionModel ) ->
-            HistorySession.update historySessionMsg historySessionModel
-                |> updateWith HistorySession GotHistorySessionMsg
-                |> (\( m, c, a ) -> performActions m c a)
+            let
+                ( newMdl, newCmd, actions ) =
+                    HistorySession.update historySessionMsg historySessionModel
+            in
+            updateWith HistorySession GotHistorySessionMsg ( newMdl, newCmd )
+                |> (\( mdl, cmd ) -> performActions mdl cmd actions)
 
         ( _, _ ) ->
             ( model, Cmd.none )
 
 
-updateWith : (subModel -> Model) -> (subMsg -> Msg) -> ( subModel, Cmd subMsg, List Actions.Action ) -> ( Model, Cmd Msg, List Actions.Action )
-updateWith toModel toMsg ( subModel, subCmd, actions ) =
+updateWith : (subModel -> Model) -> (subMsg -> Msg) -> ( subModel, Cmd subMsg ) -> ( Model, Cmd Msg )
+updateWith toModel toMsg ( subModel, subCmd ) =
     ( toModel subModel
     , Cmd.map toMsg subCmd
-    , actions
     )
-
-
-routeToPage : Actions.Route -> ( Model, Cmd Msg )
-routeToPage route =
-    case route of
-        Actions.Home ->
-            let
-                ( homeModel, homeCmd ) =
-                    Home.init
-            in
-            ( Home homeModel, Cmd.map GotHomeMsg homeCmd )
-
-        Actions.EditSession ->
-            let
-                ( editSessionModel, editSessionCmd ) =
-                    EditSession.init
-            in
-            ( EditSession editSessionModel, Cmd.map GotEditSessionMsg editSessionCmd )
-
-        Actions.NewExercise ->
-            let
-                ( newExerciseModel, newExerciseCmd ) =
-                    NewExercise.init
-            in
-            ( NewExercise newExerciseModel, Cmd.map GotNewExerciseMsg newExerciseCmd )
-
-        Actions.History ->
-            let
-                ( historyModel, historyCmd ) =
-                    History.init
-            in
-            ( History historyModel, Cmd.map GotHistoryMsg historyCmd )
-
-        Actions.HistorySession ->
-            let
-                ( historySessionModel, historySessionCmd ) =
-                    HistorySession.init
-            in
-            ( HistorySession historySessionModel, Cmd.map GotHistorySessionMsg historySessionCmd )
 
 
 performActions : Model -> Cmd Msg -> List Actions.Action -> ( Model, Cmd Msg )
@@ -153,10 +128,34 @@ performActions model cmd actions =
                 Actions.GoToRoute route ->
                     let
                         ( newModel, newCmd ) =
-                            routeToPage route
+                            router route
                     in
                     -- ignore the rest when navigating to a new page
                     ( newModel, Cmd.batch [ cmd, newCmd ] )
+
+
+router : Actions.Route -> ( Model, Cmd Msg )
+router route =
+    case route of
+        Actions.Home ->
+            Home.init
+                |> updateWith Home GotHomeMsg
+
+        Actions.EditSession ->
+            EditSession.init
+                |> updateWith EditSession GotEditSessionMsg
+
+        Actions.NewExercise ->
+            NewExercise.init
+                |> updateWith NewExercise GotNewExerciseMsg
+
+        Actions.History ->
+            History.init
+                |> updateWith History GotHistoryMsg
+
+        Actions.HistorySession ->
+            HistorySession.init
+                |> updateWith HistorySession GotHistorySessionMsg
 
 
 
