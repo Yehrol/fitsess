@@ -61,6 +61,46 @@ type Msg
 -- | SetStorage
 
 
+update : Msg -> Model -> ( Model, Cmd Msg )
+update msg model =
+    case ( msg, model ) of
+        ( GotHomeMsg homeMsg, Home homeModel ) ->
+            Home.update homeMsg homeModel
+                |> updateWith Home GotHomeMsg
+                |> (\( m, c, a ) -> performActions m c a)
+
+        ( GotEditSessionMsg editSessionMsg, EditSession editSessionModel ) ->
+            EditSession.update editSessionMsg editSessionModel
+                |> updateWith EditSession GotEditSessionMsg
+                |> (\( m, c, a ) -> performActions m c a)
+
+        ( GotNewExerciseMsg newExerciseMsg, NewExercise newExerciseModel ) ->
+            NewExercise.update newExerciseMsg newExerciseModel
+                |> updateWith NewExercise GotNewExerciseMsg
+                |> (\( m, c, a ) -> performActions m c a)
+
+        ( GotHistoryMsg historyMsg, History historyModel ) ->
+            History.update historyMsg historyModel
+                |> updateWith History GotHistoryMsg
+                |> (\( m, c, a ) -> performActions m c a)
+
+        ( GotHistorySessionMsg historySessionMsg, HistorySession historySessionModel ) ->
+            HistorySession.update historySessionMsg historySessionModel
+                |> updateWith HistorySession GotHistorySessionMsg
+                |> (\( m, c, a ) -> performActions m c a)
+
+        ( _, _ ) ->
+            ( model, Cmd.none )
+
+
+updateWith : (subModel -> Model) -> (subMsg -> Msg) -> ( subModel, Cmd subMsg, List Actions.Action ) -> ( Model, Cmd Msg, List Actions.Action )
+updateWith toModel toMsg ( subModel, subCmd, actions ) =
+    ( toModel subModel
+    , Cmd.map toMsg subCmd
+    , actions
+    )
+
+
 routeToPage : Actions.Route -> ( Model, Cmd Msg )
 routeToPage route =
     case route of
@@ -119,63 +159,6 @@ performActions model cmd actions =
                     ( newModel, Cmd.batch [ cmd, newCmd ] )
 
 
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
-    case ( msg, model ) of
-        ( GotHomeMsg homeMsg, Home homeModel ) ->
-            let
-                ( a, b, c ) =
-                    Home.update homeMsg homeModel
-
-                ( newHomeModel, homeCmd ) =
-                    performActions (Home a) (Cmd.map GotHomeMsg b) c
-            in
-            ( newHomeModel, homeCmd )
-
-        ( GotEditSessionMsg editSessionMsg, EditSession editSessionModel ) ->
-            let
-                ( a, b, c ) =
-                    EditSession.update editSessionMsg editSessionModel
-
-                ( newEditSessionModel, editSessionCmd ) =
-                    performActions (EditSession a) (Cmd.map GotEditSessionMsg b) c
-            in
-            ( newEditSessionModel, editSessionCmd )
-
-        ( GotNewExerciseMsg newExerciseMsg, NewExercise newExerciseModel ) ->
-            let
-                ( a, b, c ) =
-                    NewExercise.update newExerciseMsg newExerciseModel
-
-                ( newNewExerciseModel, newExerciseCmd ) =
-                    performActions (NewExercise a) (Cmd.map GotNewExerciseMsg b) c
-            in
-            ( newNewExerciseModel, newExerciseCmd )
-
-        ( GotHistoryMsg historyMsg, History historyModel ) ->
-            let
-                ( a, b, c ) =
-                    History.update historyMsg historyModel
-
-                ( newHistoryModel, historyCmd ) =
-                    performActions (History a) (Cmd.map GotHistoryMsg b) c
-            in
-            ( newHistoryModel, historyCmd )
-
-        ( GotHistorySessionMsg historySessionMsg, HistorySession historySessionModel ) ->
-            let
-                ( a, b, c ) =
-                    HistorySession.update historySessionMsg historySessionModel
-
-                ( newHistorySessionModel, historySessionCmd ) =
-                    performActions (HistorySession a) (Cmd.map GotHistorySessionMsg b) c
-            in
-            ( newHistorySessionModel, historySessionCmd )
-
-        ( _, _ ) ->
-            ( model, Cmd.none )
-
-
 
 -- SetStorage ->
 --     ( model, setStorage (Model "2025.04.25") )
@@ -186,7 +169,7 @@ update msg model =
 
 view : Model -> Browser.Document Msg
 view model =
-    { title = "Elm - Capacitor"
+    { title = "Fitsess"
     , body =
         [ case model of
             Home homeModel ->
