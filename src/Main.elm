@@ -37,9 +37,7 @@ init flags =
         ( homeModel, homeCmd ) =
             Home.init
     in
-    ( Home homeModel
-    , Cmd.map GotHomeMsg homeCmd
-    )
+    updateWith Home GotHomeMsg ( homeModel, homeCmd )
 
 
 
