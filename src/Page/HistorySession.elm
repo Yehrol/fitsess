@@ -53,7 +53,9 @@ update msg model =
 view : Model -> Html Msg
 view model =
     div
-        [ style "background-color" "green"
+        [ style "display" "flex"
+        , style "flex-direction" "column"
+        , style "background-color" "green"
         , style "height" "100%"
         , style "width" "100%"
         ]
