@@ -58,8 +58,8 @@ view : Model -> Html Msg
 view model =
     div
         [ style "background-color" "violet"
-        , style "height" "100px"
-        , style "width" "100px"
+        , style "height" "100%"
+        , style "width" "100%"
         ]
         [ button
             [ onClick GoBack

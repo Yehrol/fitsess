@@ -168,26 +168,34 @@ view : Model -> Browser.Document Msg
 view model =
     { title = "Fitsess"
     , body =
-        [ case model of
-            Home homeModel ->
-                Home.view homeModel
-                    |> Html.map GotHomeMsg
+        [ Html.div
+            [ style "display" "flex"
+            , style "flex-direction" "column"
+            , style "align-items" "center"
+            , style "justify-content" "center"
+            , style "height" "100vh"
+            ]
+            [ case model of
+                Home homeModel ->
+                    Home.view homeModel
+                        |> Html.map GotHomeMsg
 
-            EditSession editSessionModel ->
-                EditSession.view editSessionModel
-                    |> Html.map GotEditSessionMsg
+                EditSession editSessionModel ->
+                    EditSession.view editSessionModel
+                        |> Html.map GotEditSessionMsg
 
-            NewExercise newExerciseModel ->
-                NewExercise.view newExerciseModel
-                    |> Html.map GotNewExerciseMsg
+                NewExercise newExerciseModel ->
+                    NewExercise.view newExerciseModel
+                        |> Html.map GotNewExerciseMsg
 
-            History historyModel ->
-                History.view historyModel
-                    |> Html.map GotHistoryMsg
+                History historyModel ->
+                    History.view historyModel
+                        |> Html.map GotHistoryMsg
 
-            HistorySession historySessionModel ->
-                HistorySession.view historySessionModel
-                    |> Html.map GotHistorySessionMsg
+                HistorySession historySessionModel ->
+                    HistorySession.view historySessionModel
+                        |> Html.map GotHistorySessionMsg
+            ]
         ]
     }
 
