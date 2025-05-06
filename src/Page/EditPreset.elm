@@ -1,4 +1,4 @@
-module Page.EditSession exposing (..)
+module Page.EditPreset exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -60,7 +60,7 @@ view model =
         , style "gap" "20px"
         , style "height" "100%"
         , style "width" "100%"
-        , style "background-color" "yellow"
+        , style "background-color" "orange"
         ]
         [ button
             [ onClick GoBack

@@ -55,9 +55,12 @@ view model =
     div
         [ style "display" "flex"
         , style "flex-direction" "column"
-        , style "background-color" "green"
+        , style "align-items" "center"
+        , style "justify-content" "center"
+        , style "gap" "20px"
         , style "height" "100%"
         , style "width" "100%"
+        , style "background-color" "green"
         ]
         [ button
             [ onClick GoBack

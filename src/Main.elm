@@ -5,6 +5,7 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Internal.Actions as Actions
+import Page.EditPreset as EditPreset
 import Page.EditSession as EditSession
 import Page.History as History
 import Page.HistorySession as HistorySession
@@ -29,6 +30,7 @@ type Model
     | NewExercise NewExercise.Model
     | History History.Model
     | HistorySession HistorySession.Model
+    | EditPreset EditPreset.Model
 
 
 init : Flags -> ( Model, Cmd Msg )
@@ -53,6 +55,7 @@ type Msg
     | GotNewExerciseMsg NewExercise.Msg
     | GotHistoryMsg History.Msg
     | GotHistorySessionMsg HistorySession.Msg
+    | GotEditPresetMsg EditPreset.Msg
 
 
 
@@ -84,6 +87,14 @@ update msg model =
                     NewExercise.update newExerciseMsg newExerciseModel
             in
             updateWith NewExercise GotNewExerciseMsg ( newMdl, newCmd )
+                |> (\( mdl, cmd ) -> performActions mdl cmd actions)
+
+        ( GotEditPresetMsg editPresetMsg, EditPreset editPresetModel ) ->
+            let
+                ( newMdl, newCmd, actions ) =
+                    EditPreset.update editPresetMsg editPresetModel
+            in
+            updateWith EditPreset GotEditPresetMsg ( newMdl, newCmd )
                 |> (\( mdl, cmd ) -> performActions mdl cmd actions)
 
         ( GotHistoryMsg historyMsg, History historyModel ) ->
@@ -147,6 +158,10 @@ router route =
             NewExercise.init
                 |> updateWith NewExercise GotNewExerciseMsg
 
+        Actions.EditPreset ->
+            EditPreset.init
+                |> updateWith EditPreset GotEditPresetMsg
+
         Actions.History ->
             History.init
                 |> updateWith History GotHistoryMsg
@@ -187,6 +202,10 @@ view model =
                 NewExercise newExerciseModel ->
                     NewExercise.view newExerciseModel
                         |> Html.map GotNewExerciseMsg
+
+                EditPreset editPresetModel ->
+                    EditPreset.view editPresetModel
+                        |> Html.map GotEditPresetMsg
 
                 History historyModel ->
                     History.view historyModel

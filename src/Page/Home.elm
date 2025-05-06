@@ -34,6 +34,7 @@ type Msg
     | GoToEditSession
     | GoToNewExercise
     | GoToHistory
+    | GoToEditPreset
 
 
 update : Msg -> Model -> ( Model, Cmd Msg, List Action )
@@ -51,6 +52,9 @@ update msg model =
         GoToHistory ->
             ( model, Cmd.none, [ GoToRoute History ] )
 
+        GoToEditPreset ->
+            ( model, Cmd.none, [ GoToRoute EditPreset ] )
+
 
 
 -- ========================================================================== --
@@ -63,9 +67,12 @@ view model =
     div
         [ style "display" "flex"
         , style "flex-direction" "column"
-        , style "background-color" "red"
+        , style "align-items" "center"
+        , style "justify-content" "center"
+        , style "gap" "20px"
         , style "height" "100%"
         , style "width" "100%"
+        , style "background-color" "red"
         ]
         [ button
             [ onClick GoToEditSession
@@ -75,6 +82,10 @@ view model =
             [ onClick GoToNewExercise
             ]
             [ text "Add an exercise" ]
+        , button
+            [ onClick GoToEditPreset
+            ]
+            [ text "Edit preset" ]
         , button
             [ onClick GoToHistory
             ]
